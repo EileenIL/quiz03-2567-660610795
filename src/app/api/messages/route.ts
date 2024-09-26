@@ -56,8 +56,8 @@ export const POST = async (request: NextRequest) => {
 export const DELETE = async () => {
  
   const payload = checkToken();
-  const { roomId , messageId } = <Payload>payload;
-if (!payload){
+  const { role,roomId , messageId } = <Payload>payload;
+if (!payload && role !== "SUPER_ADMIN" ){
   return NextResponse.json(
      {
        ok: false,
