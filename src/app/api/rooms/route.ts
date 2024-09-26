@@ -2,7 +2,7 @@ import { DB, readDB, writeDB } from "@lib/DB";
 import { checkToken } from "@lib/checkToken";
 import { Database,Payload} from "@lib/types";
 import { nanoid } from "nanoid";
-import { NextResponse } from "next/server";
+import {  NextRequest,NextResponse } from "next/server";
 
 export const GET = async () => {
   readDB();
@@ -14,10 +14,10 @@ export const GET = async () => {
   });
 };
 
-export const POST = async () => {
+export const POST = async (request: NextRequest) => {
   const payload = checkToken();
   const { role } = <Payload>payload;
-  if (!payload) {
+  if (!payload || (role !== "ADMIN" && role !== "SUPER_ADMIN")) {
  return NextResponse.json(
     {
       ok: false,
@@ -27,14 +27,17 @@ export const POST = async () => {
    );
   }
   readDB();
-  if (role === "ADMIN" || role === "SUPER_ADMIN") {
+  
+  const body = await request.json();
+  const { roomName } = body;
+  if ((<Database>DB).rooms.find((room) => room.roomName === roomName)) {
     return NextResponse.json(
-        {
-          ok: false,
-          message: `Room ${"replace this with room name"} already exists`,
-        },
-        { status: 400 }
-     );
+      {
+        ok: false,
+        message: `Room ${roomName} already exists`,
+      },
+      { status: 400 }
+    );
   }
 
   // return NextResponse.json(
