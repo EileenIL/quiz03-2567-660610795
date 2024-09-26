@@ -53,7 +53,7 @@ export const POST = async (request: NextRequest) => {
   });
 };
 
-export const DELETE = async (request: NextRequest) => {
+export const DELETE = async () => {
   const payload = checkToken();
   const { roomId , messageId } = <Payload>payload;
 if (!payload){
@@ -69,6 +69,7 @@ if (!payload){
 
 
   readDB();
+
   const messageIndex = (<Database>DB).messages.findIndex(
     (message) => message.roomId === roomId && message.messageId === messageId
   );
