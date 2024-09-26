@@ -14,7 +14,7 @@ export const GET = async () => {
   });
 };
 
-export const POST = async (request: NextRequest) => {
+export const POST = async () => {
   const payload = checkToken();
   const { role } = <Payload>payload;
   if (!payload) {

@@ -53,8 +53,8 @@ export const POST = async (request: NextRequest) => {
   });
 };
 
-export const DELETE = async (request: NextRequest) => {
-  const body = await request.json();
+export const DELETE = async () => {
+ 
   const payload = checkToken();
   const { roomId , messageId } = <Payload>payload;
 if (!payload){
